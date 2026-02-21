@@ -2,6 +2,21 @@ import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserType } from '../users/entities/user.entity';
 
+interface RegisterDto {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName?: string;
+  secondLastName?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+  type?: UserType;
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -12,20 +27,7 @@ export class AuthController {
   }
 
   @Post('register')
-  register(
-    @Body()
-    body: {
-      email: string;
-      password: string;
-      name: string;
-      type?: UserType;
-    },
-  ) {
-    return this.authService.register(
-      body.email,
-      body.password,
-      body.name,
-      body.type,
-    );
+  register(@Body() body: RegisterDto) {
+    return this.authService.register(body);
   }
 }

@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Patch, Param, Body, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserType } from './entities/user.entity';
+import { UserType, User } from './entities/user.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -23,26 +14,6 @@ export class UsersController {
   @Get('me')
   getProfile(@CurrentUser() user: any) {
     return this.usersService.findOne(user.id);
-  }
-
-  @Post()
-  @UseGuards(RolesGuard)
-  @Roles(UserType.ADMIN)
-  create(
-    @Body()
-    body: {
-      email: string;
-      password: string;
-      name: string;
-      type?: UserType;
-    },
-  ) {
-    return this.usersService.create(
-      body.email,
-      body.password,
-      body.name,
-      body.type,
-    );
   }
 
   @Get()
@@ -60,19 +31,34 @@ export class UsersController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() body: { email?: string; name?: string; type?: UserType },
+    @Body() body: Partial<User>,
     @CurrentUser() user: any,
   ) {
     if (user.type !== UserType.ADMIN && user.id !== +id) {
-      return this.usersService.update(+id, { name: body.name });
+      const { email, type, ...allowedUpdates } = body;
+      return this.usersService.update(+id, allowedUpdates);
     }
     return this.usersService.update(+id, body);
   }
 
-  @Delete(':id')
+  @Patch(':id/type')
   @UseGuards(RolesGuard)
   @Roles(UserType.ADMIN)
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  updateType(@Param('id') id: string, @Body() body: { type: UserType }) {
+    return this.usersService.update(+id, { type: body.type });
+  }
+
+  @Patch(':id/password')
+  updatePassword(
+    @Param('id') id: string,
+    @Body() body: { currentPassword: string; newPassword: string },
+    @CurrentUser() user: any,
+  ) {
+    return this.usersService.updatePassword(
+      +id,
+      body.currentPassword,
+      body.newPassword,
+      user.id,
+    );
   }
 }

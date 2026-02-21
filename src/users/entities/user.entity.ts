@@ -25,7 +25,31 @@ export class User {
   password: string;
 
   @Column()
-  name: string;
+  firstName: string;
+
+  @Column({ nullable: true })
+  lastName: string;
+
+  @Column({ nullable: true })
+  secondLastName: string;
+
+  @Column({ nullable: true })
+  phone: string;
+
+  @Column({ nullable: true })
+  address: string;
+
+  @Column({ nullable: true })
+  city: string;
+
+  @Column({ nullable: true })
+  state: string;
+
+  @Column({ nullable: true })
+  zipCode: string;
+
+  @Column({ nullable: true })
+  country: string;
 
   @Column({
     type: 'simple-enum',
@@ -33,6 +57,9 @@ export class User {
     default: UserType.CLIENT,
   })
   type: UserType;
+
+  @Column({ nullable: true })
+  refreshToken: string;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -9,6 +9,21 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User, UserType } from '../users/entities/user.entity';
 
+export interface RegisterDto {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName?: string;
+  secondLastName?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
+  country?: string;
+  type?: UserType;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -37,29 +52,42 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        secondLastName: user.secondLastName,
+        phone: user.phone,
+        address: user.address,
+        city: user.city,
+        state: user.state,
+        zipCode: user.zipCode,
+        country: user.country,
         type: user.type,
       },
     };
   }
 
-  async register(
-    email: string,
-    password: string,
-    name: string,
-    type: UserType = UserType.CLIENT,
-  ) {
-    const existing = await this.usersRepository.findOne({ where: { email } });
+  async register(dto: RegisterDto) {
+    const existing = await this.usersRepository.findOne({
+      where: { email: dto.email },
+    });
     if (existing) {
       throw new ConflictException('Email already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(dto.password, 12);
     const user = this.usersRepository.create({
-      email,
+      email: dto.email,
       password: hashedPassword,
-      name,
-      type,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      secondLastName: dto.secondLastName,
+      phone: dto.phone,
+      address: dto.address,
+      city: dto.city,
+      state: dto.state,
+      zipCode: dto.zipCode,
+      country: dto.country,
+      type: dto.type || UserType.CLIENT,
     });
 
     await this.usersRepository.save(user);
