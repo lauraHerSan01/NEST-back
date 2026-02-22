@@ -68,4 +68,16 @@ export class UsersService {
     const user = await this.findOne(id);
     await this.usersRepository.remove(user);
   }
+
+  async getTeam(): Promise<User[]> {
+    return this.usersRepository.find({ where: { showInTeam: true } });
+  }
+
+  async setTeamMember(id: number, attrs: Partial<User>): Promise<User> {
+    const user = await this.findOne(id);
+    user.showInTeam = attrs.showInTeam ?? user.showInTeam;
+    user.position = attrs.position ?? user.position;
+    user.teamImage = attrs.teamImage ?? user.teamImage;
+    return this.usersRepository.save(user);
+  }
 }

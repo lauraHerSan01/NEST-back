@@ -61,6 +61,15 @@ export class User {
   @Column({ nullable: true })
   refreshToken: string;
 
+  @Column({ default: false })
+  showInTeam: boolean;
+
+  @Column({ nullable: true })
+  position: string;
+
+  @Column({ nullable: true })
+  teamImage: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

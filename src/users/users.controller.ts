@@ -61,4 +61,16 @@ export class UsersController {
       user.id,
     );
   }
+
+  @Get('team/all')
+  getTeam() {
+    return this.usersService.getTeam();
+  }
+
+  @Patch(':id/team')
+  @UseGuards(RolesGuard)
+  @Roles(UserType.ADMIN)
+  setTeamMember(@Param('id') id: string, @Body() body: Partial<User>) {
+    return this.usersService.setTeamMember(+id, body);
+  }
 }
