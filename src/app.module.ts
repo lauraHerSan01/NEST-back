@@ -8,6 +8,7 @@ import { ConsultationsModule } from './consultations/consultations.module';
 import { AuthModule } from './auth/auth.module';
 import { ServicesModule } from './services/services.module';
 import { ProjectTemplatesModule } from './project-templates/project-templates.module';
+import { CompanyInfoModule } from './company-info/company-info.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ProjectTemplatesModule } from './project-templates/project-templates.mo
     AuthModule,
     ServicesModule,
     ProjectTemplatesModule,
+    CompanyInfoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
