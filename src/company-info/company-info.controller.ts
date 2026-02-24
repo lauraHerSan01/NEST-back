@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Patch, Body, UseGuards, Put } from '@nestjs/common';
 import { CompanyInfoService } from './company-info.service';
 import { CompanyInfo } from './entities/company-info.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -20,5 +20,12 @@ export class CompanyInfoController {
   @Roles(UserType.ADMIN)
   update(@Body() data: Partial<CompanyInfo>) {
     return this.companyInfoService.update(data);
+  }
+
+  @Put('gallery')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserType.ADMIN)
+  updateGallery(@Body() body: { gallery: string[] }) {
+    return this.companyInfoService.update({ gallery: body.gallery });
   }
 }

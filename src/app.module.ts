@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { ServicesModule } from './services/services.module';
 import { ProjectTemplatesModule } from './project-templates/project-templates.module';
 import { CompanyInfoModule } from './company-info/company-info.module';
+import { ContactsModule } from './contacts/contacts.module';
+import { SocialNetworksModule } from './social-networks/social-networks.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { CompanyInfoModule } from './company-info/company-info.module';
     ServicesModule,
     ProjectTemplatesModule,
     CompanyInfoModule,
+    ContactsModule,
+    SocialNetworksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

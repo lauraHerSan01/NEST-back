@@ -25,6 +25,9 @@ export class CompanyInfo {
   @Column({ type: 'text', nullable: true })
   aboutUs: string;
 
+  @Column({ type: 'simple-array', nullable: true })
+  gallery: string[];
+
   @UpdateDateColumn()
   updatedAt: Date;
 }
